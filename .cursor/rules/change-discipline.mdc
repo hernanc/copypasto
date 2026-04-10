@@ -1,0 +1,81 @@
+---
+description: Rules for making safe, complete changes across the codebase
+globs:
+  - "**/*"
+---
+
+# Change Discipline
+
+## Before Writing Code
+
+1. **Read the files you're about to change.** Understand the existing patterns before editing.
+2. **Trace the call flow.** If changing a service function, find all callers. If changing a route, check the middleware chain. If changing a type, find all consumers.
+3. **Check both sides of the boundary.** Changes to the server API contract (REST or WebSocket) require matching changes in the client. Changes to DynamoDB schema require matching changes in both Terraform and server code.
+
+## Cross-Component Changes
+
+These changes span multiple components and are easy to get wrong:
+
+| Change | Server | Client | Terraform |
+|--------|--------|--------|-----------|
+| New API endpoint | Route + service + types | NetworkService + caller | Rate limit consideration |
+| New WS message type | ws.ts + handler.ts + connections.ts | WebSocketService + AuthService | — |
+| New DynamoDB attribute | service.ts + types | — | dynamodb.tf if new index/TTL |
+| New env var | config.ts + .env.example | — | ecs.tf (env or secrets block) + ssm.tf if secret |
+| Domain/URL change | — | Constants.swift | route53.tf + acm.tf |
+| New DynamoDB table | service.ts | — | dynamodb.tf + iam.tf (task role policy) |
+
+When making a change from the left column, check every column to the right.
+
+## Deployment Awareness
+
+- **Server changes** require `./deploy.sh` (Docker build + ECR push + ECS redeploy). The build must target `linux/amd64` (the deploy script handles this via `docker buildx`).
+- **Client changes** require rebuilding via `./client/run.sh` or Xcode.
+- **Terraform changes** require `terraform plan` review before `terraform apply`.
+- **Breaking API changes** need the server deployed before the client is rebuilt (or the old client will break against the new API).
+
+## Completeness Checklist
+
+Before declaring a change done:
+
+- [ ] TypeScript compiles cleanly: `cd server && npx tsc --noEmit`
+- [ ] Client builds: `cd client && xcodebuild -project Copypasto.xcodeproj -scheme Copypasto build`
+- [ ] Terraform validates: `cd terraform && terraform validate`
+- [ ] No new `any` types introduced in server code
+- [ ] No hardcoded secrets, URLs, or magic numbers added
+- [ ] Logging added for observable operations (without sensitive data)
+- [ ] Rate limiting configured for new endpoints
+- [ ] Auth middleware applied to new protected endpoints
+
+## Pitfalls Specific to This Codebase
+
+### Clipboard Loop
+The most subtle bug: Device A copies → sends to server → server pushes to Device A again → infinite loop. Prevention depends on two mechanisms working together:
+1. Server excludes the sender WebSocket from `broadcastToUser`
+2. Client's `ClipboardMonitor.ignoreNextChange` flag skips the self-written change
+
+If you modify clipboard write logic on either side, test that a copy on one device does not echo back indefinitely.
+
+### Docker Platform
+This repo is developed on Apple Silicon (ARM) but deployed to ECS Fargate (x86_64). Always build with `--platform linux/amd64`. The `deploy.sh` script handles this, but manual `docker build` commands will produce ARM images by default.
+
+### ESM Import Extensions
+The server uses NodeNext module resolution. All relative imports must include the `.js` extension, even though the source files are `.ts`. Forgetting this causes runtime `ERR_MODULE_NOT_FOUND` errors that won't appear at compile time.
+
+### DynamoDB Sort Key Ordering
+Clipboard entries use sort key `CLIP#<iso8601>#<ulid>`. The ISO-8601 timestamp prefix ensures lexicographic ordering matches chronological ordering. If you change the sort key format, you break the "newest first" query pattern (`ScanIndexForward: false`).
+
+### Single ECS Task
+The system runs 1 ECS task. WebSocket connection state lives in an in-memory `Map<string, Set<WebSocket>>`. Scaling to multiple tasks requires adding a cross-task messaging layer (e.g., DynamoDB Streams, SNS, or Redis pub/sub). Do not set `desired_count > 1` without implementing this.
+
+### SSM Parameter Imports
+If you create SSM parameters via AWS CLI before Terraform manages them, you must `terraform import` them. Otherwise `terraform apply` fails with `ParameterAlreadyExists`.
+
+## What Not to Do
+
+- Do not refactor code you weren't asked to change. Fix the bug or add the feature — nothing more.
+- Do not introduce a second way to do something when one way already exists (second validation library, second error format, second config mechanism).
+- Do not leave partial migrations. If you rename a field, rename it everywhere.
+- Do not add dead code, commented-out code, or "TODO: implement later" stubs.
+- Do not change the error message format. Clients depend on `{ error: "..." }` shape.
+- Do not bypass TypeScript strict mode with `as any`, `@ts-ignore`, or `@ts-expect-error`.

@@ -1,0 +1,98 @@
+---
+description: macOS client Swift conventions and patterns
+globs:
+  - "client/**"
+---
+
+# Client Conventions
+
+Swift 5.10, SwiftUI, macOS 14+, Xcode 16+. Menu bar app (no dock icon, no main window).
+
+## File Organization
+
+```
+client/Copypasto/
+  CopypasstoApp.swift        @main entry point — MenuBarExtra with .window style
+  Info.plist                  LSUIElement=true (no dock icon)
+  Models/
+    ClipboardEntry.swift      Data model for encrypted clipboard items
+    User.swift                Auth response types (AuthResponse, TokenResponse, etc.)
+  Services/
+    AuthService.swift         ObservableObject — login state, clipboard history, orchestration
+    ClipboardMonitor.swift    NSPasteboard polling (0.5s) with loop prevention
+    CryptoService.swift       PBKDF2 key derivation + AES-256-GCM encrypt/decrypt
+    KeychainService.swift     macOS Keychain wrapper (kSecClassGenericPassword)
+    NetworkService.swift      Actor — REST client with automatic 401 retry + token refresh
+    WebSocketService.swift    URLSessionWebSocketTask with auto-reconnect + exponential backoff
+  Views/
+    LoginView.swift           Email + password form
+    ClipboardListView.swift   Last 5 entries with click-to-copy
+    MenuBarView.swift         Root view — switches between LoginView and ClipboardListView
+  Utilities/
+    Constants.swift           All config: URLs, Keychain keys, intervals, limits
+```
+
+## Patterns to Follow
+
+### Service Architecture
+- `AuthService` is the central coordinator — it owns `NetworkService`, `WebSocketService`, `ClipboardMonitor`, and the encryption key.
+- `NetworkService` is an `actor` for thread-safe token management.
+- `WebSocketService` uses a delegate pattern (`WebSocketServiceDelegate`) to notify `AuthService`.
+- `ClipboardMonitor` uses a closure callback (`onClipboardChange`).
+
+### Encryption — Client's Responsibility
+All encryption logic lives in `CryptoService`. Rules:
+- Key derivation: PBKDF2-SHA256 via CommonCrypto (`CCKeyDerivationPBKDF`), 600,000 iterations, 32-byte output.
+- Encryption: `AES.GCM.seal()` with fresh random nonce per entry.
+- Decryption: `AES.GCM.open()` reconstructing the SealedBox from iv + ciphertext.
+- The encryption key (`SymmetricKey`) is held in memory only. Never write it to Keychain, UserDefaults, or disk.
+- The encryption salt comes from the server and is stored in Keychain (it's not secret, but it's needed for key derivation).
+
+### Token Storage
+- Access token: in-memory only (in `NetworkService`). Lost on app restart — requires refresh.
+- Refresh token: macOS Keychain via `KeychainService`.
+- Encryption salt: macOS Keychain via `KeychainService`.
+- Never store tokens or keys in UserDefaults, plist files, or the filesystem.
+- Keychain accessibility: `kSecAttrAccessibleAfterFirstUnlock` — available after first unlock, survives app restarts.
+
+### Clipboard Loop Prevention
+When writing a remote clipboard update to `NSPasteboard`:
+1. Set `ignoreNextChange = true` in `ClipboardMonitor`.
+2. Write to pasteboard via `writeFromRemote()`.
+3. Update `lastChangeCount`.
+4. The next poll cycle sees the change but the flag causes it to skip.
+
+This is fragile. If you change clipboard write logic, test that copying on device A does not echo back.
+
+### Views
+- Views are pure SwiftUI — no direct network calls, no crypto, no Keychain access.
+- All state comes from `AuthService` via `@EnvironmentObject`.
+- Error messages displayed via `authService.errorMessage` binding.
+
+### Constants
+All magic values live in `Constants.swift`:
+```swift
+enum Constants {
+    static let apiBaseURL = "https://api.copypasto.com/api"
+    static let wsURL = "wss://api.copypasto.com/ws"
+    static let maxPlaintextSize = 1_048_576
+    static let pbkdf2Iterations: UInt32 = 600_000
+    // ...
+}
+```
+Never hardcode URLs, sizes, or intervals in service code. Add new constants here.
+
+### Network Error Handling
+- `NetworkService` maps HTTP responses to `NetworkError` enum cases.
+- On 401: automatically attempts token refresh, then retries the original request once.
+- On refresh failure: calls `onAuthFailure` callback → `AuthService.logout()`.
+- Non-critical failures (history load, decryption) fail silently — clipboard sync should not crash the app.
+
+## Anti-Patterns
+
+- Do not add a main window or dock icon. This is a menu bar-only app (`LSUIElement=true`).
+- Do not persist the encryption key to disk in any form.
+- Do not call `NSPasteboard` from anywhere other than `ClipboardMonitor`. Centralize clipboard access.
+- Do not add external dependencies via SPM without strong justification. CryptoKit + CommonCrypto + Foundation cover the needs.
+- Do not use `print()` for debugging in committed code.
+- Do not bypass `KeychainService` to access the Keychain directly.

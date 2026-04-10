@@ -1,0 +1,104 @@
+---
+description: Server-side TypeScript conventions and patterns
+globs:
+  - "server/**"
+---
+
+# Server Conventions
+
+TypeScript, Fastify 5, Node 20, strict mode, ESM (NodeNext resolution).
+
+## File Organization
+
+```
+server/src/
+  index.ts              Entry point — only calls buildApp() and listen()
+  app.ts                Fastify factory — registers plugins and routes
+  config.ts             Env var validation via Zod — single source of truth for config
+  db/dynamodb.ts        DynamoDB DocumentClient singleton
+  services/             Business logic — pure async functions, no classes
+    *.service.ts         Named exports, each function does one thing
+  middleware/            Fastify preHandler hooks
+    auth.ts              JWT verification, attaches userId to request
+  routes/               Route registrations — validation + orchestration only
+    auth.ts              /api/auth/* (signup, login, refresh)
+    clipboard.ts         /api/clipboard (GET history)
+    health.ts            /api/health
+  websocket/            WebSocket connection management
+    handler.ts           Connection lifecycle and message dispatch
+    connections.ts       In-memory userId → Set<WebSocket> map
+    messages.ts          Zod schemas for WS message validation
+  types/                TypeScript interfaces and Zod-inferred types
+    api.ts               REST request/response shapes
+    ws.ts                WebSocket message shapes
+```
+
+## Patterns to Follow
+
+### Validation
+Always validate at the boundary using Zod `safeParse`:
+```typescript
+const parsed = schema.safeParse(request.body);
+if (!parsed.success) {
+  return reply.code(400).send({ error: "Invalid input", details: parsed.error.flatten().fieldErrors });
+}
+const { field1, field2 } = parsed.data;
+```
+Never use `parse()` (throws). Never skip validation on user input.
+
+### Error Responses
+Always use `reply.code(N).send({ error: "..." })`:
+- 400 for validation failures (include `details` from Zod when available)
+- 401 for auth failures (same message for wrong email and wrong password — no enumeration)
+- 409 for conflicts (duplicate email)
+- Never throw from route handlers. Catch service errors and map to HTTP responses.
+
+### Service Layer
+- Services are in `src/services/*.service.ts` — exported as named async functions.
+- Routes never import `@aws-sdk` directly. All DB access goes through services.
+- Services return typed data or throw. Routes catch and map to HTTP responses.
+
+### Imports
+- Named imports: `import { foo } from "./bar.js";`
+- Always include `.js` extension on relative imports (required for NodeNext).
+- Type-only imports: use `import type { ... }` when importing only types.
+- No barrel exports (no `index.ts` re-exporting).
+
+### Logging
+Structured logging via Fastify logger. First arg is context object, second is message string:
+```typescript
+app.log.info({ userId, entryId: entry.id, contentLength: entry.contentLength }, "Clipboard entry stored");
+app.log.error(err, "Failed to store clipboard entry");
+```
+
+**Never log**: passwords, password hashes, JWT tokens, refresh tokens, ciphertext, IVs, encryption salts, email addresses in info-level logs. When in doubt, log an ID, not a value.
+
+### Config
+All environment variables are validated in `src/config.ts`. Access config only via `import { config } from "../config.js"`. Never read `process.env` directly elsewhere.
+
+### Auth
+- Protected routes: add `{ preHandler: authMiddleware }` to the route options.
+- After auth middleware runs, `request.userId` is available (typed via module augmentation in `middleware/auth.ts`).
+- WebSocket auth: verify token from `request.query.token` inline in handler (not via middleware — Fastify websocket plugin doesn't support preHandlers the same way).
+
+### Rate Limiting
+- Auth routes: 5 req/min
+- Clipboard routes: 30 req/min
+- WebSocket: 60 msg/min per connection (tracked in handler)
+- New routes must include rate limit config. Never create an unprotected endpoint without rate limiting.
+
+### DynamoDB Patterns
+- Partition key format: `USER#<uuid>`
+- Sort key format: `PROFILE` (users) or `CLIP#<iso8601>#<ulid>` (clipboard)
+- Always use `begins_with(sk, :prefix)` in KeyConditionExpression for range queries.
+- Prune clipboard entries after insert: query, then batch-delete oldest beyond 5.
+- Batch operations: max 25 items per BatchWriteCommand (DynamoDB limit).
+
+## Anti-Patterns
+
+- Do not add Express-style middleware via `app.use()`. Use Fastify's plugin/preHandler system.
+- Do not create class-based services. Use exported functions.
+- Do not put business logic in route files. Routes validate input, call services, format output.
+- Do not use `any` type. If you need a type, define it in `types/`.
+- Do not add new npm dependencies without justification. The dependency set is intentionally small.
+- Do not use `console.log`. Use the Fastify logger.

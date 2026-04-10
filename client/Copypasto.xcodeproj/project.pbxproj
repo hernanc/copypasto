@@ -1,0 +1,373 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0D67406FAA09CC877D01A619 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F83F426BA52179F27B2DE5 /* MenuBarView.swift */; };
+		25CACC22B2511956AC19E9D7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4E6A51DFBC81850DFBD5FC /* Constants.swift */; };
+		4200B17FFCBB8BF8C044BD12 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02B890932854148D02F16898 /* AuthService.swift */; };
+		429DCFEAC276061A7D1D00AC /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B33A193B1748305AD7B21A /* WebSocketService.swift */; };
+		471F6D035A97A694FF89B87F /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4A2E264BEA996C3010D8F /* NetworkService.swift */; };
+		5AF327080A0B7FA0C6E0FA48 /* ClipboardListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C1E63139FEF4322509A5CB /* ClipboardListView.swift */; };
+		71E70347EF4D52D1BDBB991B /* CopypasstoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5033656EDF5CA2142FEA41 /* CopypasstoApp.swift */; };
+		7600C10AFAD57B0C79363710 /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E747665BB2CE45EC2B611D1 /* ClipboardMonitor.swift */; };
+		7663569BA1A602B11FF8DB7D /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4100A4973C536011D1D0C59A /* User.swift */; };
+		840EF85E78FF0B2D07885BB1 /* CryptoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E14754C99303743E8F1EFA3 /* CryptoService.swift */; };
+		8D92A3CF9E2B2ABA911B0FD6 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0693D0D692EA5CD1A660817D /* LoginView.swift */; };
+		91F474535143C1EBF6633CCE /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E74A6E49289C355F8FFBEDE2 /* KeychainService.swift */; };
+		FCAA16DD667BA66E10A79144 /* ClipboardEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4140EB3B7CAC79B069C484A /* ClipboardEntry.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02B890932854148D02F16898 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		0693D0D692EA5CD1A660817D /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		0D5033656EDF5CA2142FEA41 /* CopypasstoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopypasstoApp.swift; sourceTree = "<group>"; };
+		2E14754C99303743E8F1EFA3 /* CryptoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoService.swift; sourceTree = "<group>"; };
+		4100A4973C536011D1D0C59A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		48F83F426BA52179F27B2DE5 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		79B33A193B1748305AD7B21A /* WebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
+		9E747665BB2CE45EC2B611D1 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
+		B955E857D24BF6DD1E6020DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C4140EB3B7CAC79B069C484A /* ClipboardEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardEntry.swift; sourceTree = "<group>"; };
+		D6C1E63139FEF4322509A5CB /* ClipboardListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardListView.swift; sourceTree = "<group>"; };
+		E74A6E49289C355F8FFBEDE2 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		EDF4A2E264BEA996C3010D8F /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		F7699835331DF38026FA75E4 /* Copypasto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Copypasto.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD4E6A51DFBC81850DFBD5FC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		449BD21AF10E0827F7A3E5DB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C4140EB3B7CAC79B069C484A /* ClipboardEntry.swift */,
+				4100A4973C536011D1D0C59A /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8A6F6C3AD0C7E69E8693585C /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				FD4E6A51DFBC81850DFBD5FC /* Constants.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		9E1C140871C9151E139E6719 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D6C1E63139FEF4322509A5CB /* ClipboardListView.swift */,
+				0693D0D692EA5CD1A660817D /* LoginView.swift */,
+				48F83F426BA52179F27B2DE5 /* MenuBarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CD598BDF5AF3610C3642BFA9 = {
+			isa = PBXGroup;
+			children = (
+				DA04EFF11506A20C0FF6B6A5 /* Copypasto */,
+				DBC6E3C34B95B78CC42729A6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DA04EFF11506A20C0FF6B6A5 /* Copypasto */ = {
+			isa = PBXGroup;
+			children = (
+				0D5033656EDF5CA2142FEA41 /* CopypasstoApp.swift */,
+				B955E857D24BF6DD1E6020DD /* Info.plist */,
+				449BD21AF10E0827F7A3E5DB /* Models */,
+				F67C8A5EC89540EBE452A7F5 /* Services */,
+				8A6F6C3AD0C7E69E8693585C /* Utilities */,
+				9E1C140871C9151E139E6719 /* Views */,
+			);
+			path = Copypasto;
+			sourceTree = "<group>";
+		};
+		DBC6E3C34B95B78CC42729A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F7699835331DF38026FA75E4 /* Copypasto.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F67C8A5EC89540EBE452A7F5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				02B890932854148D02F16898 /* AuthService.swift */,
+				9E747665BB2CE45EC2B611D1 /* ClipboardMonitor.swift */,
+				2E14754C99303743E8F1EFA3 /* CryptoService.swift */,
+				E74A6E49289C355F8FFBEDE2 /* KeychainService.swift */,
+				EDF4A2E264BEA996C3010D8F /* NetworkService.swift */,
+				79B33A193B1748305AD7B21A /* WebSocketService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AFBBBD0382B6481DFEEBB9F6 /* Copypasto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B8DACFE156182D665F5457A2 /* Build configuration list for PBXNativeTarget "Copypasto" */;
+			buildPhases = (
+				9EEB68ECE5313C24E3A473A9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Copypasto;
+			packageProductDependencies = (
+			);
+			productName = Copypasto;
+			productReference = F7699835331DF38026FA75E4 /* Copypasto.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FA7BA7F6D4BB6CC7292CB2C7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					AFBBBD0382B6481DFEEBB9F6 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = DDA9328A215B8C8114C72550 /* Build configuration list for PBXProject "Copypasto" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CD598BDF5AF3610C3642BFA9;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = DBC6E3C34B95B78CC42729A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AFBBBD0382B6481DFEEBB9F6 /* Copypasto */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9EEB68ECE5313C24E3A473A9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4200B17FFCBB8BF8C044BD12 /* AuthService.swift in Sources */,
+				FCAA16DD667BA66E10A79144 /* ClipboardEntry.swift in Sources */,
+				5AF327080A0B7FA0C6E0FA48 /* ClipboardListView.swift in Sources */,
+				7600C10AFAD57B0C79363710 /* ClipboardMonitor.swift in Sources */,
+				25CACC22B2511956AC19E9D7 /* Constants.swift in Sources */,
+				71E70347EF4D52D1BDBB991B /* CopypasstoApp.swift in Sources */,
+				840EF85E78FF0B2D07885BB1 /* CryptoService.swift in Sources */,
+				91F474535143C1EBF6633CCE /* KeychainService.swift in Sources */,
+				8D92A3CF9E2B2ABA911B0FD6 /* LoginView.swift in Sources */,
+				0D67406FAA09CC877D01A619 /* MenuBarView.swift in Sources */,
+				471F6D035A97A694FF89B87F /* NetworkService.swift in Sources */,
+				7663569BA1A602B11FF8DB7D /* User.swift in Sources */,
+				429DCFEAC276061A7D1D00AC /* WebSocketService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		398E970B7D5A4C8068A03E5B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		3A25F98D5864F8ED6D363CBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C49369A1753E4E3C91C6E24F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Copypasto/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.copypasto.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+		EE63A65E1AE5BBBEB73B3661 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Copypasto/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.copypasto.app;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B8DACFE156182D665F5457A2 /* Build configuration list for PBXNativeTarget "Copypasto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EE63A65E1AE5BBBEB73B3661 /* Debug */,
+				C49369A1753E4E3C91C6E24F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DDA9328A215B8C8114C72550 /* Build configuration list for PBXProject "Copypasto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3A25F98D5864F8ED6D363CBA /* Debug */,
+				398E970B7D5A4C8068A03E5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FA7BA7F6D4BB6CC7292CB2C7 /* Project object */;
+}

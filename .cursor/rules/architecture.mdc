@@ -1,0 +1,65 @@
+---
+description: Core architecture rules for copypasto — enforced on all changes
+globs:
+  - "**/*"
+---
+
+# Architecture
+
+Copypasto has three components. Each lives in its own directory and has its own language/toolchain. Never mix concerns across boundaries.
+
+## Component Boundaries
+
+| Component | Language | Framework | Directory |
+|-----------|----------|-----------|-----------|
+| Server | TypeScript (strict) | Fastify 5 + @fastify/websocket | `server/src/` |
+| Client | Swift 5.10 | SwiftUI + CryptoKit | `client/Copypasto/` |
+| Infrastructure | HCL | Terraform + AWS provider | `terraform/` |
+
+## Dependency Direction
+
+```
+Client → Server (via HTTPS REST + WSS WebSocket)
+Server → DynamoDB (via AWS SDK)
+Terraform → provisions everything the server runs on
+```
+
+- The server never calls the client.
+- The server never imports client code or shares types with it.
+- Terraform manages infra only — no application logic in HCL.
+
+## The E2E Encryption Invariant
+
+This is the most important architectural constraint:
+
+**The server must NEVER see plaintext clipboard content.**
+
+- All encryption and decryption happens in the client (`CryptoService.swift`).
+- The server receives and stores only `ciphertext` (base64) and `iv` (base64).
+- If a feature requires the server to read, search, filter, or transform clipboard content, the feature cannot be built as designed. Redesign it to work with encrypted data or move the logic to the client.
+- Never add server-side logging that includes `ciphertext` or decrypted content.
+
+## Multi-Tenancy Isolation
+
+Every data operation must be scoped to a single user:
+
+- DynamoDB queries use `pk = USER#<userId>` as the partition key. Never scan without a partition key.
+- WebSocket broadcasts use `broadcastToUser(userId, message, excludeWs)` — messages go only to connections belonging to the same userId.
+- There is no admin API, no cross-user query path, no shared data namespace.
+
+If you add a new data access pattern, it must include the userId scope. No exceptions.
+
+## Data Model
+
+**Users table**: `pk=USER#<uuid>`, `sk=PROFILE`. GSI `email-index` on `email` attribute.
+**Clipboard table**: `pk=USER#<uuid>`, `sk=CLIP#<iso8601>#<ulid>`. Max 5 entries per user. 30-day TTL.
+
+The single-table-per-concern pattern is intentional. Do not merge tables or add new tables without strong justification.
+
+## API Surface
+
+- REST endpoints live under `/api` prefix: `/api/auth/*`, `/api/clipboard`, `/api/health`.
+- WebSocket endpoint at `/ws` (root path, not under `/api`).
+- Domain is `api.copypasto.com`. The apex `copypasto.com` is reserved for a marketing website.
+
+If adding new endpoints, follow the existing prefix convention and add rate limiting.

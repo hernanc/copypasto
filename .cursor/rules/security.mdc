@@ -1,0 +1,109 @@
+---
+description: Security rules — enforced on all changes, especially auth, crypto, data access, and infra
+globs:
+  - "**/*"
+---
+
+# Security Rules
+
+Copypasto handles user credentials, encrypted clipboard data, and authentication tokens. Security constraints are non-negotiable.
+
+## Encryption
+
+- **AES-256-GCM** with fresh random 12-byte IV per entry. Never reuse an IV.
+- **PBKDF2-SHA256** with 600,000 iterations for key derivation. Never lower the iteration count.
+- **bcrypt** with cost factor 12 for password hashing. Never downgrade to a weaker hash.
+- The encryption key exists only in client memory. It is never transmitted, persisted, or logged.
+- The server stores `ciphertext` and `iv` as opaque base64 blobs. No server-side code may decrypt, inspect, or transform clipboard content.
+
+## Secrets Management
+
+**Never hardcode** secrets, tokens, API keys, or credentials anywhere in the codebase.
+
+| Secret | Where It Lives | How It's Accessed |
+|--------|---------------|-------------------|
+| JWT_SECRET | AWS SSM Parameter Store (SecureString) | ECS task definition `secrets` block |
+| JWT_REFRESH_SECRET | AWS SSM Parameter Store (SecureString) | ECS task definition `secrets` block |
+| User passwords | DynamoDB (bcrypt hash only) | `auth.service.ts` via bcrypt.compare |
+| Refresh tokens | DynamoDB (SHA-256 hash only) | `user.service.ts` updateRefreshTokenHash |
+| Encryption salt | DynamoDB (plaintext — not secret) | Returned to client on login |
+| Client tokens | macOS Keychain | `KeychainService.swift` |
+| Client encryption key | In-memory only | `AuthService.swift` encryptionKey property |
+
+Rules:
+- Never add secrets to `terraform.tfvars`, `.env` files committed to git, or source code.
+- SSM parameters use `lifecycle { ignore_changes = [value] }` so Terraform doesn't overwrite live secrets.
+- Never log secrets at any level. This includes tokens, password hashes, encryption salts, and ciphertext.
+
+## Authentication
+
+### Token Lifecycle
+- Access token: 15-minute expiry, stateless JWT verification. Stored in memory only.
+- Refresh token: 30-day expiry, single-use. Server stores SHA-256 hash. Each refresh invalidates the previous token.
+- On refresh, both access and refresh tokens are rotated. Never skip rotation.
+
+### Auth Boundaries
+- `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/refresh`, `GET /api/health` — public.
+- Everything else requires `Authorization: Bearer <accessToken>` validated by `authMiddleware`.
+- WebSocket requires `?token=<accessToken>` query parameter, validated in the connection handler.
+- New endpoints default to requiring auth. Making an endpoint public requires justification.
+
+### Credential Handling
+- Login and signup return identical error messages for "user not found" and "wrong password" (`"Invalid email or password"`). Never differentiate — this prevents user enumeration.
+- Email normalized to lowercase + trimmed on every operation. Never compare emails case-sensitively.
+
+## Data Isolation
+
+- Every DynamoDB operation uses `pk = USER#<userId>`. Never query across users.
+- WebSocket `broadcastToUser()` sends only to connections of the same userId, excluding the sender.
+- If adding new queries, the partition key must always include the authenticated userId.
+- There is no admin role, no superuser, no cross-tenant access.
+
+## Input Validation
+
+- All REST request bodies validated with Zod schemas before processing.
+- All WebSocket messages validated with Zod discriminated union before dispatch.
+- Clipboard content size enforced: client checks plaintext ≤ 1MB, server checks base64 ciphertext length.
+- Email: `z.string().email().max(255)`. Password: `z.string().min(8).max(128)` on signup.
+
+## Network Security
+
+- HTTPS enforced via ALB: HTTP 80 redirects to HTTPS 443.
+- TLS policy: `ELBSecurityPolicy-TLS13-1-2-2021-06` — TLS 1.3 preferred, 1.2 minimum.
+- ECS tasks in private subnets — no direct internet access, traffic flows through NAT gateway and ALB.
+- ALB security group: inbound 80/443 only. ECS security group: inbound only from ALB on port 3000.
+
+## Rate Limiting
+
+| Endpoint | Limit |
+|----------|-------|
+| `/api/auth/*` | 5 req/min |
+| `/api/clipboard` | 30 req/min |
+| WebSocket messages | 60 msg/min per connection |
+
+Never remove rate limiting. Never increase limits by more than 2x without load testing.
+
+## Docker / Container Security
+
+- Multi-stage build: build dependencies don't ship in the runtime image.
+- Runtime image runs as non-root user (`appuser:appgroup`, UID/GID 1001).
+- Base image: `node:20-alpine` — minimal attack surface.
+- Never run as root. Never add `--privileged` or `SYS_ADMIN` capabilities.
+
+## Dependency Caution
+
+- The server has a minimal dependency set. New dependencies must be justified.
+- Before adding a dependency: check maintenance status, audit history, transitive dependency count.
+- Never add dependencies that require native compilation unless absolutely necessary.
+- Run `npm audit` after adding dependencies. Do not merge with known high-severity vulnerabilities in new deps.
+
+## Change Review Checklist
+
+When reviewing or making changes that touch security:
+- [ ] Does this change expose any data that was previously encrypted or hidden?
+- [ ] Does this change weaken any authentication or authorization check?
+- [ ] Does this change log anything sensitive (tokens, passwords, ciphertext, PII)?
+- [ ] Does this change allow cross-user data access?
+- [ ] Does this change introduce a new input path that isn't validated?
+- [ ] Does this change modify IAM permissions, security groups, or network config?
+- [ ] Does this change affect the encryption flow or key derivation?
