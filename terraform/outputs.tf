@@ -22,3 +22,18 @@ output "app_url" {
   description = "Application URL"
   value       = "https://api.${var.domain_name}"
 }
+
+output "website_url" {
+  description = "Marketing website URL"
+  value       = "https://${var.domain_name}"
+}
+
+output "website_bucket" {
+  description = "Website S3 bucket name"
+  value       = aws_s3_bucket.website.id
+}
+
+output "website_cdn_id" {
+  description = "Website CloudFront distribution ID"
+  value       = aws_cloudfront_distribution.website.id
+}

@@ -8,9 +8,10 @@ globs:
 
 ## Before Writing Code
 
-1. **Read the files you're about to change.** Understand the existing patterns before editing.
-2. **Trace the call flow.** If changing a service function, find all callers. If changing a route, check the middleware chain. If changing a type, find all consumers.
-3. **Check both sides of the boundary.** Changes to the server API contract (REST or WebSocket) require matching changes in the client. Changes to DynamoDB schema require matching changes in both Terraform and server code.
+1. **Read the project learning files.** Check `docs/ai/lessons-learned.md` for relevant past mistakes and `docs/ai/success-patterns.md` for proven approaches. Check `docs/ai/decision-log.md` if your change might conflict with a prior architectural decision.
+2. **Read the files you're about to change.** Understand the existing patterns before editing.
+3. **Trace the call flow.** If changing a service function, find all callers. If changing a route, check the middleware chain. If changing a type, find all consumers.
+4. **Check both sides of the boundary.** Changes to the server API contract (REST or WebSocket) require matching changes in the client. Changes to DynamoDB schema require matching changes in both Terraform and server code.
 
 ## Cross-Component Changes
 
@@ -70,6 +71,44 @@ The system runs 1 ECS task. WebSocket connection state lives in an in-memory `Ma
 
 ### SSM Parameter Imports
 If you create SSM parameters via AWS CLI before Terraform manages them, you must `terraform import` them. Otherwise `terraform apply` fails with `ParameterAlreadyExists`.
+
+## Verification Requirements
+
+No work is done until it is verified. "The code looks right" is not verification.
+
+### Required verification before declaring any change complete:
+```sh
+# Server changes
+cd server && npx tsc --noEmit          # must exit 0
+
+# Client changes
+cd client && xcodebuild -project Copypasto.xcodeproj -scheme Copypasto -destination "platform=macOS" build 2>&1 | tail -3
+                                        # must show BUILD SUCCEEDED
+
+# Terraform changes
+cd terraform && terraform validate      # must exit 0
+```
+
+### Verification levels — always state which applies:
+- **Implemented, not verified** — code written, no checks run. Explicitly say this.
+- **Locally verified** — relevant compile/build checks passed.
+- **Deployed and verified** — server deployed via `./deploy.sh`, health check confirmed, feature tested against live endpoint.
+
+### Prohibited:
+- Claiming a bug is fixed without validating the fix
+- Claiming a feature is complete without verifying behavior
+- Saying "compiles cleanly" without running the compiler
+- Ignoring failing checks and marking work done
+- Treating edit-only as "done" when the change requires deployment
+
+## After Completing Work
+
+Update the project learning files in `docs/ai/`:
+- **`lessons-learned.md`** — if you hit a mistake, regression, or near-miss
+- **`success-patterns.md`** — if an approach worked well and is worth reusing
+- **`decision-log.md`** — if a significant technical decision was made
+
+Repeating a documented mistake is a process failure.
 
 ## What Not to Do
 

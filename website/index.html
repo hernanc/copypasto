@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copypasto — Clipboard Sync for Mac with End-to-End Encryption</title>
+  <meta name="description" content="Copy on one Mac, paste on another. Copypasto syncs your clipboard across devices in real time with end-to-end encryption. The server never sees your data.">
+  <meta name="keywords" content="clipboard sync, mac clipboard, cross-device clipboard, end-to-end encryption, clipboard manager, macOS utility">
+  <link rel="canonical" href="https://copypasto.com">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://copypasto.com">
+  <meta property="og:title" content="Copypasto — Clipboard Sync for Mac with E2E Encryption">
+  <meta property="og:description" content="Copy on one Mac, paste on another. Real-time clipboard sync with end-to-end encryption.">
+  <meta property="og:image" content="https://copypasto.com/assets/og-image.png">
+  <meta property="og:site_name" content="Copypasto">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Copypasto — Clipboard Sync for Mac with E2E Encryption">
+  <meta name="twitter:description" content="Copy on one Mac, paste on another. Real-time clipboard sync with end-to-end encryption.">
+  <meta name="twitter:image" content="https://copypasto.com/assets/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Copypasto",
+    "operatingSystem": "macOS",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "Cross-device clipboard sync for Mac with end-to-end encryption",
+    "url": "https://copypasto.com",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner container">
+      <a href="/" class="nav-logo" aria-label="Copypasto home">
+        <svg class="nav-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="9" y="1" width="12" height="16" rx="2" fill="var(--color-bg)" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M13 5h4M13 8h4M13 11h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>Copypasto</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#security">Security</a>
+        <a href="#faq">FAQ</a>
+        <a href="#waitlist" class="btn btn-sm">Get early access</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" role="navigation" aria-label="Mobile navigation" hidden>
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#security">Security</a>
+    <a href="#faq">FAQ</a>
+    <a href="#waitlist" class="btn">Get early access</a>
+  </div>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">End-to-end encrypted</div>
+        <h1>Copy here.<br>Paste there.</h1>
+        <p class="hero-sub">Sync your clipboard across Macs in real time. Your data is encrypted on your device before it ever leaves &mdash; the server never sees plaintext.</p>
+        <div class="hero-cta">
+          <a href="#waitlist" class="btn btn-lg">Get early access</a>
+          <a href="#how-it-works" class="btn btn-ghost btn-lg">See how it works</a>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-window hero-window-left">
+            <div class="window-chrome">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="window-body">
+              <div class="window-line w-80"></div>
+              <div class="window-line w-60 selected">
+                <span class="cursor"></span>
+              </div>
+              <div class="window-line w-70"></div>
+              <div class="window-line w-40"></div>
+            </div>
+            <div class="window-label">MacBook Pro</div>
+          </div>
+          <div class="hero-sync">
+            <div class="sync-line">
+              <div class="sync-dot"></div>
+            </div>
+            <div class="sync-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+            <div class="sync-badge">AES-256-GCM</div>
+          </div>
+          <div class="hero-window hero-window-right">
+            <div class="window-chrome">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="window-body">
+              <div class="window-line w-70"></div>
+              <div class="window-line w-50"></div>
+              <div class="window-line w-80"></div>
+              <div class="window-line w-60 pasted">
+                <span class="cursor"></span>
+              </div>
+            </div>
+            <div class="window-label">Mac Studio</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Built for people who care about their data</h2>
+          <p>Copypasto is designed around one principle: your clipboard content belongs to you and nobody else.</p>
+        </div>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                <circle cx="12" cy="16" r="1"/>
+              </svg>
+            </div>
+            <h3>End-to-end encrypted</h3>
+            <p>Your clipboard is encrypted on your Mac before transmission. The server stores only opaque ciphertext &mdash; it cannot read your data, ever.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3>Real-time sync</h3>
+            <p>Copy on one Mac, paste on another within milliseconds. WebSocket connections keep your devices in sync without polling or delays.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+            <h3>Lives in your menu bar</h3>
+            <p>A lightweight native macOS app that stays out of your way. No dock icon, no windows to manage &mdash; just a quiet menu bar icon.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <h3>Clipboard history</h3>
+            <p>Access your last 5 clipboard entries from any device. Click to copy any previous entry back to your active clipboard.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3>Zero-knowledge architecture</h3>
+            <p>Encryption keys are derived from your password on-device. They never leave your Mac, and the server never learns them.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3>Multi-device, single account</h3>
+            <p>Sign in on as many Macs as you want. Same password derives the same encryption key, so all devices can decrypt seamlessly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="how-it-works section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>How it works</h2>
+          <p>Three steps. No configuration, no pairing codes, no iCloud dependency.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number" aria-hidden="true">1</div>
+            <div class="step-content">
+              <h3>Sign up &amp; sign in</h3>
+              <p>Create an account from the menu bar. Your password is used to derive your encryption key locally &mdash; it's never sent in plaintext.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number" aria-hidden="true">2</div>
+            <div class="step-content">
+              <h3>Copy as usual</h3>
+              <p>Use your Mac normally. Copypasto watches your clipboard in the background and encrypts new entries with AES-256-GCM before syncing.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number" aria-hidden="true">3</div>
+            <div class="step-content">
+              <h3>Paste on any Mac</h3>
+              <p>Your clipboard appears on your other devices in milliseconds. Click any history entry to paste it. That's it.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section id="security" class="security section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Security you can verify</h2>
+          <p>Copypasto is built on well-known cryptographic primitives with no proprietary magic. Here's exactly what happens to your data.</p>
+        </div>
+        <div class="security-grid">
+          <div class="security-card">
+            <div class="security-label">Encryption</div>
+            <div class="security-value">AES-256-GCM</div>
+            <p>Industry-standard authenticated encryption. Every clipboard entry gets a fresh random IV.</p>
+          </div>
+          <div class="security-card">
+            <div class="security-label">Key derivation</div>
+            <div class="security-value">PBKDF2-SHA256</div>
+            <p>600,000 iterations derive your encryption key from your password + a server-stored salt.</p>
+          </div>
+          <div class="security-card">
+            <div class="security-label">Password storage</div>
+            <div class="security-value">bcrypt (12 rounds)</div>
+            <p>Your password is hashed before storage. The server never stores or logs plaintext passwords.</p>
+          </div>
+          <div class="security-card">
+            <div class="security-label">Transport</div>
+            <div class="security-value">TLS 1.3</div>
+            <p>All connections use HTTPS and WSS with TLS 1.3. No downgrade to older protocols.</p>
+          </div>
+          <div class="security-card">
+            <div class="security-label">Token model</div>
+            <div class="security-value">Rotating JWTs</div>
+            <p>15-minute access tokens. Single-use refresh tokens that rotate on every use.</p>
+          </div>
+          <div class="security-card">
+            <div class="security-label">Data retention</div>
+            <div class="security-value">30-day TTL</div>
+            <p>Encrypted clipboard entries auto-delete after 30 days. Only the last 5 entries are kept.</p>
+          </div>
+        </div>
+        <div class="security-footer">
+          <div class="security-diagram" aria-hidden="true">
+            <div class="diagram-step">
+              <div class="diagram-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <span>Your Mac</span>
+            </div>
+            <div class="diagram-arrow">
+              <span class="diagram-label">encrypted</span>
+              <svg width="40" height="12" viewBox="0 0 40 12"><path d="M0 6h36M32 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="diagram-step">
+              <div class="diagram-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+              </div>
+              <span>Server</span>
+            </div>
+            <div class="diagram-arrow">
+              <span class="diagram-label">encrypted</span>
+              <svg width="40" height="12" viewBox="0 0 40 12"><path d="M0 6h36M32 1l5 5-5 5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="diagram-step">
+              <div class="diagram-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <span>Other Mac</span>
+            </div>
+          </div>
+          <p class="diagram-caption">The server only relays opaque ciphertext. It cannot decrypt your clipboard content.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq section section-alt">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <h2>Questions</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Does this work with Universal Clipboard / iCloud?</summary>
+            <p>Copypasto is independent of iCloud and Apple's Universal Clipboard. It works across any Macs signed into the same Copypasto account, regardless of Apple ID or iCloud settings. It's especially useful if you use different Apple IDs on work and personal machines.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Can you read my clipboard data?</summary>
+            <p>No. Your clipboard content is encrypted on your Mac using a key derived from your password. The server only stores and relays encrypted blobs. We have no way to decrypt them.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What types of content are supported?</summary>
+            <p>Text only for now. Each entry can be up to 1 MB. Images, files, and rich content are not yet supported but are on the roadmap.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What happens if I change my password?</summary>
+            <p>Your encryption key is derived from your password, so changing it means existing encrypted entries can no longer be decrypted. They are deleted automatically. This is by design &mdash; clipboard data is ephemeral.</p>
+          </details>
+          <details class="faq-item">
+            <summary>How many devices can I use?</summary>
+            <p>As many as you want. Sign in on each Mac with the same email and password. The encryption key is derived deterministically, so all devices can decrypt.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Is it free?</summary>
+            <p>Yes, during the early access period. Pricing for the future has not been determined yet.</p>
+          </details>
+          <details class="faq-item">
+            <summary>What macOS versions are supported?</summary>
+            <p>macOS 14 (Sonoma) and later. The app is built with SwiftUI and requires a 64-bit Mac.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / Waitlist -->
+    <section id="waitlist" class="waitlist section">
+      <div class="container container-narrow">
+        <div class="waitlist-card">
+          <h2>Get early access</h2>
+          <p>Copypasto is currently in early access. Leave your email and we'll send you a download link when it's ready for you.</p>
+          <form class="waitlist-form" id="waitlist-form" action="#" method="POST">
+            <div class="form-row">
+              <label for="waitlist-email" class="sr-only">Email address</label>
+              <input
+                type="email"
+                id="waitlist-email"
+                name="email"
+                placeholder="you@example.com"
+                required
+                autocomplete="email"
+                aria-label="Email address"
+              >
+              <button type="submit" class="btn btn-lg">Notify me</button>
+            </div>
+            <p class="form-note">No spam. Just one email when it's your turn.</p>
+          </form>
+          <div class="waitlist-success" id="waitlist-success" hidden>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            <p>You're on the list. We'll be in touch.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg class="footer-logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="3" y="4" width="12" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="9" y="1" width="12" height="16" rx="2" fill="var(--color-bg-alt)" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M13 5h4M13 8h4M13 11h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>Copypasto</span>
+        </div>
+        <p class="footer-copy">&copy; 2026 Copypasto. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

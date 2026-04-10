@@ -91,6 +91,40 @@ The server NEVER sees plaintext clipboard content. All encryption/decryption hap
 - **No hardcoded values**: Everything through variables with defaults in `variables.tf`.
 - **State**: S3 backend (`copypasto-terraform-state`), encrypted, versioned.
 
+## Verification Discipline
+
+No change may be declared done without actual verification. "The code looks right" is not verification.
+
+### Required checks before declaring any change complete:
+- **Server**: `cd server && npx tsc --noEmit` must pass with zero errors
+- **Client**: `cd client && xcodebuild -project Copypasto.xcodeproj -scheme Copypasto -destination "platform=macOS" build 2>&1 | tail -3` must show `BUILD SUCCEEDED`
+- **Terraform**: `cd terraform && terraform validate` must pass
+- **Live endpoint** (after deploy): `curl -s https://api.copypasto.com/api/health` must return `{"status":"ok",...}`
+
+### Prohibited behavior:
+- Claiming a bug is fixed without reproducing or validating the fix
+- Claiming a feature is complete without verifying expected behavior
+- Claiming work is production-ready while skipping relevant checks
+- Saying "the TypeScript compiles" without running `tsc --noEmit`
+- Saying "the client builds" without running `xcodebuild`
+- Ignoring failing checks and marking work done anyway
+
+### Verification levels — be explicit about which applies:
+- **Implemented, not verified**: Code written but checks not run. Say this explicitly.
+- **Locally verified**: Relevant compile/build checks passed locally.
+- **Deployed and verified**: Server deployed, health check passing, feature tested against live API.
+
+## Project Learning System
+
+Before starting non-trivial work, read:
+- `docs/ai/lessons-learned.md` — Mistakes and how to avoid repeating them
+- `docs/ai/success-patterns.md` — Approaches that worked well
+- `docs/ai/decision-log.md` — Why things are the way they are
+
+After completing meaningful work (features, bug fixes, investigations, refactors, deployments):
+- Add entries to the appropriate learning file if something was learned
+- A repeated documented mistake is a process failure
+
 ## Security Boundaries — Do Not Weaken
 
 1. Clipboard content encrypted client-side before transmission — server must never decrypt

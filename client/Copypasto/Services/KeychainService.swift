@@ -1,62 +1,77 @@
 import Foundation
-import Security
 
+/// Stores credentials in a file within the app's Application Support directory.
+/// This avoids macOS Keychain password prompts that occur with ad-hoc signed
+/// development builds. The storage file is readable only by the current user.
 enum KeychainService {
 
-    static func save(key: String, data: Data) -> Bool {
-        delete(key: key)
+    private static var storageURL: URL {
+        let appSupport = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        ).first!
+        let dir = appSupport.appendingPathComponent("Copypasto", isDirectory: true)
 
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Constants.keychainService,
-            kSecAttrAccount as String: key,
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
-            kSecUseDataProtectionKeychain as String: true,
-        ]
+        if !FileManager.default.fileExists(atPath: dir.path) {
+            try? FileManager.default.createDirectory(
+                at: dir,
+                withIntermediateDirectories: true,
+                attributes: [.posixPermissions: 0o700]
+            )
+        }
 
-        let status = SecItemAdd(query as CFDictionary, nil)
-        return status == errSecSuccess
+        return dir.appendingPathComponent("credentials.json")
     }
 
+    private static func readStore() -> [String: String] {
+        guard let data = try? Data(contentsOf: storageURL),
+              let dict = try? JSONDecoder().decode([String: String].self, from: data) else {
+            return [:]
+        }
+        return dict
+    }
+
+    private static func writeStore(_ store: [String: String]) {
+        guard let data = try? JSONEncoder().encode(store) else { return }
+        try? data.write(to: storageURL, options: [.atomic, .completeFileProtection])
+
+        // Ensure the file is only readable by the current user
+        try? FileManager.default.setAttributes(
+            [.posixPermissions: 0o600],
+            ofItemAtPath: storageURL.path
+        )
+    }
+
+    @discardableResult
+    static func save(key: String, data: Data) -> Bool {
+        guard let string = String(data: data, encoding: .utf8) else { return false }
+        return save(key: key, string: string)
+    }
+
+    @discardableResult
     static func save(key: String, string: String) -> Bool {
-        guard let data = string.data(using: .utf8) else { return false }
-        return save(key: key, data: data)
+        var store = readStore()
+        store[key] = string
+        writeStore(store)
+        return true
     }
 
     static func load(key: String) -> Data? {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Constants.keychainService,
-            kSecAttrAccount as String: key,
-            kSecReturnData as String: true,
-            kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecUseDataProtectionKeychain as String: true,
-        ]
-
-        var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-
-        guard status == errSecSuccess else { return nil }
-        return result as? Data
+        guard let string = loadString(key: key) else { return nil }
+        return string.data(using: .utf8)
     }
 
     static func loadString(key: String) -> String? {
-        guard let data = load(key: key) else { return nil }
-        return String(data: data, encoding: .utf8)
+        let store = readStore()
+        return store[key]
     }
 
     @discardableResult
     static func delete(key: String) -> Bool {
-        let query: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: Constants.keychainService,
-            kSecAttrAccount as String: key,
-            kSecUseDataProtectionKeychain as String: true,
-        ]
-
-        let status = SecItemDelete(query as CFDictionary)
-        return status == errSecSuccess || status == errSecItemNotFound
+        var store = readStore()
+        store.removeValue(forKey: key)
+        writeStore(store)
+        return true
     }
 
     static func deleteAll() {
