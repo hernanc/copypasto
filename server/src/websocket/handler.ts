@@ -26,8 +26,10 @@ export async function websocketHandler(app: FastifyInstance): Promise<void> {
     try {
       const payload = verifyAccessToken(token);
       userId = payload.userId;
-    } catch {
-      sendToSocket(socket, { type: "error", code: "AUTH_INVALID", message: "Invalid token" });
+    } catch (err) {
+      const isExpired = err instanceof Error && err.name === "TokenExpiredError";
+      const code = isExpired ? "AUTH_EXPIRED" : "AUTH_INVALID";
+      sendToSocket(socket, { type: "error", code, message: "Invalid token" });
       socket.close(4001, "Invalid token");
       return;
     }
