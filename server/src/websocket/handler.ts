@@ -14,7 +14,7 @@ interface RateState {
 }
 
 export async function websocketHandler(app: FastifyInstance): Promise<void> {
-  app.get("/ws", { websocket: true }, (socket, request) => {
+  app.get("/ws", { websocket: true, logLevel: "silent" }, (socket, request) => {
     const token = (request.query as Record<string, string>).token;
     if (!token) {
       sendToSocket(socket, { type: "error", code: "AUTH_MISSING", message: "Token required" });
