@@ -11,7 +11,19 @@ import { websocketHandler } from "./websocket/handler.js";
 export async function buildApp() {
   const app = Fastify({
     logger: true,
+    trustProxy: true,
     bodyLimit: 2 * 1024 * 1024, // 2MB for base64-encoded clipboard content
+  });
+
+  app.addHook("onRequest", async (_request, reply) => {
+    reply.header("X-Content-Type-Options", "nosniff");
+    reply.header("X-Frame-Options", "DENY");
+    reply.header("X-XSS-Protection", "0");
+    reply.header("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    reply.header("Referrer-Policy", "no-referrer");
+    reply.header("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    reply.header("Content-Security-Policy", "default-src 'none'");
+    reply.header("Cache-Control", "no-store");
   });
 
   await app.register(cors, { origin: true });

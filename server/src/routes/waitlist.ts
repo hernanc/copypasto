@@ -3,7 +3,7 @@ import { z } from "zod";
 import { saveWaitlistEntry, sendNotificationEmail } from "../services/waitlist.service.js";
 
 const waitlistSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().max(255).transform((e) => e.toLowerCase().trim()),
 });
 
 export async function waitlistRoutes(app: FastifyInstance): Promise<void> {
