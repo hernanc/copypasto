@@ -8,6 +8,7 @@ final class AuthService: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var clipboardEntries: [ClipboardEntry] = []
+    @Published var connectionState: ConnectionState = .disconnected
 
     private let network = NetworkService()
     private let webSocket = WebSocketService()
@@ -17,6 +18,11 @@ final class AuthService: ObservableObject {
 
     init() {
         webSocket.delegate = self
+
+        webSocket.onRequestFreshToken = { [weak self] in
+            guard let self else { return nil }
+            return await self.network.refreshAccessToken()
+        }
 
         clipboardMonitor.onClipboardChange = { [weak self] text in
             Task { @MainActor in
@@ -247,15 +253,9 @@ extension AuthService: WebSocketServiceDelegate {
         }
     }
 
-    nonisolated func webSocketDidDisconnect() {
-        // Reconnection is handled internally by WebSocketService
-    }
-
-    nonisolated func webSocketAuthExpired() {
-        // Token refresh will be triggered by the network service
-        // For now, just log the user out if we can't refresh
+    nonisolated func webSocketDidChangeState(_ state: ConnectionState) {
         Task { @MainActor in
-            // The WebSocket will reconnect after the network service refreshes tokens
+            self.connectionState = state
         }
     }
 }

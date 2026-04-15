@@ -49,6 +49,15 @@ actor NetworkService {
         return try await post(path: "/auth/login", body: body, authenticated: false)
     }
 
+    func refreshAccessToken() async -> String? {
+        do {
+            if try await attemptTokenRefresh() {
+                return self.accessToken
+            }
+        } catch {}
+        return nil
+    }
+
     // MARK: - Clipboard endpoints
 
     func getClipboardHistory() async throws -> ClipboardListResponse {

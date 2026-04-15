@@ -42,3 +42,4 @@ npm-debug.log*
 
 # Docker
 .docker/
+client/.build-release/

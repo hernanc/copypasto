@@ -9,6 +9,9 @@ enum Constants {
     static let keychainEncryptionSaltKey = "encryptionSalt"
     static let clipboardPollInterval: TimeInterval = 0.5
     static let wsPingInterval: TimeInterval = 30
+    static let wsInitialReconnectDelay: TimeInterval = 1
+    static let wsMaxReconnectDelay: TimeInterval = 30
+    static let wsPongTimeout: TimeInterval = 10
     static let maxPlaintextSize = 1_048_576 // 1MB
     static let pbkdf2Iterations: UInt32 = 600_000
 }

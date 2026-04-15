@@ -26,13 +26,39 @@ struct ClipboardListView: View {
                     .foregroundStyle(.tertiary)
             }
             Spacer()
-            Image(systemName: "clipboard.fill")
-                .font(.system(size: 14))
-                .foregroundStyle(.tertiary)
+            connectionBadge
         }
         .padding(.horizontal, 14)
         .padding(.top, 14)
         .padding(.bottom, 10)
+    }
+
+    private var connectionBadge: some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(connectionColor)
+                .frame(width: 6, height: 6)
+            Text(authService.connectionState.statusLabel)
+                .font(.system(size: 10))
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 7)
+        .padding(.vertical, 3)
+        .background(
+            Capsule()
+                .fill(connectionColor.opacity(0.1))
+        )
+    }
+
+    private var connectionColor: Color {
+        switch authService.connectionState {
+        case .connected:
+            return .green
+        case .connecting, .reconnecting:
+            return .orange
+        case .disconnected, .waitingForNetwork:
+            return .red
+        }
     }
 
     @ViewBuilder
