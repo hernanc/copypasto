@@ -68,3 +68,30 @@ resource "aws_iam_role_policy" "ecs_task_dynamodb" {
   role   = aws_iam_role.ecs_task.id
   policy = data.aws_iam_policy_document.ecs_task_dynamodb.json
 }
+
+data "aws_iam_policy_document" "ecs_task_waitlist" {
+  statement {
+    sid = "WaitlistDynamoDB"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+    ]
+    resources = [
+      aws_dynamodb_table.waitlist.arn,
+    ]
+  }
+
+  statement {
+    sid     = "WaitlistSES"
+    actions = ["ses:SendEmail"]
+    resources = [
+      aws_ses_email_identity.notification.arn,
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "ecs_task_waitlist" {
+  name   = "waitlist-access"
+  role   = aws_iam_role.ecs_task.id
+  policy = data.aws_iam_policy_document.ecs_task_waitlist.json
+}

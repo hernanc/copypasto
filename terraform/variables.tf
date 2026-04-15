@@ -33,3 +33,9 @@ variable "container_port" {
   type        = number
   default     = 3000
 }
+
+variable "notification_email" {
+  description = "Email address for waitlist notifications"
+  type        = string
+  default     = "hernan@avantasoftware.com"
+}

@@ -62,17 +62,29 @@
       var email = form.querySelector('input[type="email"]').value;
       if (!email) return;
 
-      // For now, just show success state.
-      // Replace with actual API call when backend endpoint exists.
-      // Example:
-      // fetch("https://api.copypasto.com/api/waitlist", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email: email })
-      // });
+      var submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting\u2026";
 
-      form.hidden = true;
-      success.hidden = false;
+      fetch("https://api.copypasto.com/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email }),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("Request failed");
+          form.hidden = true;
+          success.hidden = false;
+        })
+        .catch(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Notify me";
+          var note = form.querySelector(".form-note");
+          if (note) {
+            note.textContent = "Something went wrong. Please try again.";
+            note.style.color = "var(--color-text)";
+          }
+        });
     });
   }
 })();

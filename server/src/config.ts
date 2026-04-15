@@ -7,6 +7,8 @@ const envSchema = z.object({
   AWS_REGION: z.string().default("us-east-1"),
   DYNAMODB_USERS_TABLE: z.string().default("copypasto-users"),
   DYNAMODB_CLIPBOARD_TABLE: z.string().default("copypasto-clipboard"),
+  DYNAMODB_WAITLIST_TABLE: z.string().default("copypasto-waitlist"),
+  NOTIFICATION_EMAIL: z.string().email().default("hernan@avantasoftware.com"),
 });
 
 const parsed = envSchema.safeParse(process.env);

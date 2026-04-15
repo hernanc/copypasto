@@ -39,6 +39,8 @@ resource "aws_ecs_task_definition" "server" {
         { name = "AWS_REGION", value = var.aws_region },
         { name = "DYNAMODB_USERS_TABLE", value = aws_dynamodb_table.users.name },
         { name = "DYNAMODB_CLIPBOARD_TABLE", value = aws_dynamodb_table.clipboard.name },
+        { name = "DYNAMODB_WAITLIST_TABLE", value = aws_dynamodb_table.waitlist.name },
+        { name = "NOTIFICATION_EMAIL", value = var.notification_email },
       ]
 
       secrets = [

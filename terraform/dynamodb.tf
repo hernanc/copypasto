@@ -30,6 +30,21 @@ resource "aws_dynamodb_table" "users" {
   }
 }
 
+resource "aws_dynamodb_table" "waitlist" {
+  name         = "copypasto-waitlist"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "email"
+
+  attribute {
+    name = "email"
+    type = "S"
+  }
+
+  tags = {
+    Name = "copypasto-waitlist"
+  }
+}
+
 resource "aws_dynamodb_table" "clipboard" {
   name         = "copypasto-clipboard"
   billing_mode = "PAY_PER_REQUEST"

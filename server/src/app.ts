@@ -5,6 +5,7 @@ import websocket from "@fastify/websocket";
 import { healthRoutes } from "./routes/health.js";
 import { authRoutes } from "./routes/auth.js";
 import { clipboardRoutes } from "./routes/clipboard.js";
+import { waitlistRoutes } from "./routes/waitlist.js";
 import { websocketHandler } from "./websocket/handler.js";
 
 export async function buildApp() {
@@ -43,6 +44,15 @@ export async function buildApp() {
         config: {
           rateLimit: {
             max: 30,
+            timeWindow: "1 minute",
+          },
+        },
+      });
+
+      await api.register(waitlistRoutes, {
+        config: {
+          rateLimit: {
+            max: 3,
             timeWindow: "1 minute",
           },
         },
